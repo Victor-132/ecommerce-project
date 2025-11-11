@@ -1,20 +1,20 @@
-import axios from 'axios'
-import { useState, useEffect, Fragment } from 'react'
-import { Header } from '../../components/Header'
-import { OrdersGrid } from './OrdersGrid'
-import './OrdersPage.css'
+import axios from "axios";
+import { useState, useEffect, Fragment } from "react";
+import { Header } from "../../components/Header";
+import { OrdersGrid } from "./OrdersGrid";
+import "./OrdersPage.css";
 
-export function OrdersPage({ cart }) {
-  const [orders, setOrders] = useState([])
+export function OrdersPage({ cart, loadCart }) {
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     const fetchOrdersData = async () => {
-      const response = await axios.get('/api/orders?expand=products')
-      setOrders(response.data)
-    }
+      const response = await axios.get("/api/orders?expand=products");
+      setOrders(response.data);
+    };
 
-    fetchOrdersData()
-  }, [])
+    fetchOrdersData();
+  }, []);
 
   return (
     <>
@@ -27,8 +27,8 @@ export function OrdersPage({ cart }) {
       <div className="orders-page">
         <div className="page-title">Your Orders</div>
 
-        <OrdersGrid orders={orders} />
+        <OrdersGrid orders={orders} loadCart={loadCart} />
       </div>
     </>
-  )
+  );
 }
