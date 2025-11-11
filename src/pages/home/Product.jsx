@@ -1,46 +1,50 @@
-import axios from 'axios'
-import { useState } from 'react'
-import { formatMoney } from '../../utils/money'
-import Checkmark from '../../assets/images/icons/checkmark.png'
+import axios from "axios";
+import { useState } from "react";
+import { formatMoney } from "../../utils/money";
+import Checkmark from "../../assets/images/icons/checkmark.png";
 
 export function Product({ product, loadCart }) {
-  const [quantity, setQuantity] = useState(1)
+  const [quantity, setQuantity] = useState(1);
+  const [showAddedMessage, setShowAddedMessage] = useState(false);
 
   const addToCart = async () => {
-    await axios.post('/api/cart-items', {
+    await axios.post("/api/cart-items", {
       productId: product.id,
-      quantity
-    })
-    await loadCart()
-  }
+      quantity,
+    });
+    await loadCart();
+
+    setShowAddedMessage(true);
+
+    setTimeout(() => {
+      setShowAddedMessage(false);
+    }, 2000);
+  };
 
   const selectQuantity = (event) => {
-    const quantitySelected = Number(event.target.value)
-    setQuantity(quantitySelected)
-  }
+    const quantitySelected = Number(event.target.value);
+    setQuantity(quantitySelected);
+  };
 
   return (
     <div className="product-container">
       <div className="product-image-container">
-        <img className="product-image"
-          src={product.image} />
+        <img className="product-image" src={product.image} />
       </div>
 
-      <div className="product-name limit-text-to-2-lines">
-        {product.name}
-      </div>
+      <div className="product-name limit-text-to-2-lines">{product.name}</div>
 
       <div className="product-rating-container">
-        <img className="product-rating-stars"
-          src={`images/ratings/rating-${product.rating.stars * 10}.png`} />
+        <img
+          className="product-rating-stars"
+          src={`images/ratings/rating-${product.rating.stars * 10}.png`}
+        />
         <div className="product-rating-count link-primary">
           {product.rating.count}
         </div>
       </div>
 
-      <div className="product-price">
-        {formatMoney(product.priceCents)}
-      </div>
+      <div className="product-price">{formatMoney(product.priceCents)}</div>
 
       <div className="product-quantity-container">
         <select value={quantity} onChange={selectQuantity}>
@@ -59,7 +63,10 @@ export function Product({ product, loadCart }) {
 
       <div className="product-spacer"></div>
 
-      <div className="added-to-cart">
+      <div
+        className="added-to-cart"
+        style={{ opacity: showAddedMessage ? 1 : 0 }}
+      >
         <img src={Checkmark} />
         Added
       </div>
@@ -68,5 +75,5 @@ export function Product({ product, loadCart }) {
         Add to Cart
       </button>
     </div>
-  )
+  );
 }
